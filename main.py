@@ -7,6 +7,18 @@ from crud import get_product_categories, get_products
 
 from database import engine, get_db
 from endpoints import router_websocket, router_products, router_product_categories
+from fastapi import applications
+from fastapi.openapi.docs import get_swagger_ui_html
+
+
+def swagger_monkey_patch(*args, **kwargs):
+    return get_swagger_ui_html(
+        *args, **kwargs,
+        swagger_js_url="https://cdn.staticfile.net/swagger-ui/5.1.0/swagger-ui-bundle.min.js",
+        swagger_css_url="https://cdn.staticfile.net/swagger-ui/5.1.0/swagger-ui.min.css")
+
+
+applications.get_swagger_ui_html = swagger_monkey_patch
 
 models.Base.metadata.create_all(bind=engine)
 
